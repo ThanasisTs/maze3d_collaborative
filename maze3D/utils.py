@@ -1,7 +1,7 @@
 import math
 import numpy as np
 
-from maze3D.config import left_down, right_down, left_up, center
+from maze3D_new.config import left_down, right_down, left_up, center
 from rl_models.utils import plot_learning_curve, plot, plot_test_score
 
 goals = {"left_down": left_down, "left_up": left_up, "right_down": right_down}

@@ -5,13 +5,13 @@ from statistics import mean
 import pandas as pd
 import time
 from datetime import timedelta
-from maze3D.Maze3DEnv import Maze3D
-from maze3D.assets import *
-from maze3D.config import pause
+from maze3D_new.Maze3DEnv import Maze3D
+from maze3D_new.assets import *
+from maze3D_new.config import pause
 import numpy as np
 from tqdm import tqdm
 from maze3D.utils import convert_actions
-from maze3D.config import left_down, right_down, left_up, center
+from maze3D_new.config import left_down, right_down, left_up, center
 
 column_names = ["actions_x", "actions_y", "tray_rot_x", "tray_rot_y", "tray_rot_vel_x", "tray_rot_vel_y",
                 "ball_pos_x", "ball_pos_y", "ball_vel_x", "ball_vel_y"]
@@ -76,6 +76,7 @@ class Experiment:
 
         for i_episode in range(1, self.max_episodes + 1):
             observation = self.env.reset()
+            reset = True
             timedout = False
             episode_reward = 0
             test_offline_score = 0
@@ -101,8 +102,9 @@ class Experiment:
                     timedout = True
 
                 # Environment step
-                observation_, reward, done = self.env.step(action, timedout, goal,
+                observation_, reward, done = self.env.step(action, timedout, goal, reset,
                                                            self.config['Experiment']['loop_1']['action_duration'])
+                reset = False
                 # add experience to buffer
                 interaction = [observation, self.agent_action, reward, observation_, done]
                 self.save_experience(interaction)
