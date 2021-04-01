@@ -59,7 +59,12 @@ class Maze3D:
             pg.display.set_caption("Running at " + str(int(fps)) + " fps")
             self.observation = self.get_state()
             if checkTerminal_new(self.board.ball, goal) or timedout:
-                time.sleep(5)
+                # self.board.update()
+                # glClearDepth(1000.0)
+                # glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+                # self.board.draw(mode=True, idx=6)
+                # pg.display.flip()
+                time.sleep(3)
                 self.done = True
             if reset:
                 timeStart = time.time()

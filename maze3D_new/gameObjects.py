@@ -16,7 +16,7 @@ class GameBoard:
                 self.walls[row].append(None)
                 if layout[row][col] != 0:
                     if layout[row][col] == 2:
-                        self.hole = Hole(32*col - 150, 32*row - 150, self)
+                        self.hole = Hole(32*col - 145, 32*row - 145, self)
                     elif layout[row][col] == 3:
                         self.ball = Ball((32*col) - 150, (32*row) -150, self)
                     else:
@@ -123,7 +123,7 @@ class GameBoard:
                     return 0, 0, True
                 if self.slide:
                     print(thetaX, thetaY)
-                    if thetaY < 0 and thetaX > 0:
+                    if thetaY <= 0 and thetaX >= 0:
                         if abs(thetaY) > abs(thetaX):
                             if self.collideSquare(x+8, y):
                                 if thetaY <= 0:
@@ -143,19 +143,13 @@ class GameBoard:
                             return velx, vely, False
                         else:
                             if thetaX >= 0:
-                                if self.collideSquare(x+8, y):
-                                    if thetaY <= 0:
-                                        return 0, 0, True
-                                    else:
-                                        return velx, 0, False
-                                return -0.1*np.cos(thetaCol*np.pi/180), vely, False
+                                if self.collideSquare(x, y+32):
+                                    return 0, 0, True
+                                return 0, vely, False
                             else:
-                                if self.collideSquare(x, y+8):
-                                    if thetaX >= 0:
-                                        return 0, 0, True
-                                    else:
-                                        return velx, 0, False
-                                return velx, -0.1*np.sin(thetaCol*np.pi/180), False
+                                if self.collideSquare(x+32, y):
+                                    return 0, 0, True
+                                return velx, 0, False
         
         # right triangle
         elif self.layout[yGridCol5][xGridCol5] == 5:
@@ -165,7 +159,7 @@ class GameBoard:
             xCol, yCol = xBall + 8*np.cos(theta), yBall + 8*np.sin(theta)
             thetaCol = np.arctan((yCol-yObs)/(xCol-32-xObs))*180/np.pi
             
-            if thetaCol < -50 or thetaCol > -25:
+            if thetaCol < -50 or 0 > thetaCol > -10:
                 thetaCol = 134.5
             else:
                 thetaCol += 180
@@ -193,40 +187,33 @@ class GameBoard:
                     print('gonna bounch')
                     return 0, 0, True
                 if self.slide:
-
-                    if thetaY > 0 and thetaX < 0:
+                    if thetaY >= 0 and thetaX <= 0:
                         if abs(thetaY) > abs(thetaX):
                             if self.collideSquare(x, y-8):
                                 if thetaX <= 0:
                                     return velx, 0, True
                                 else:
                                     return 0, 0, False
-                            return 0.1*np.cos(thetaCol*np.pi/180), 0.1*np.sin(thetaCol*np.pi/180), False
+                            return -0.1, 0.1, False
                         else:
                             if self.collideSquare(x-8, y):
                                 if thetaY <= 0:
                                     return 0, vely, True
                                 else:
                                     return 0, 0, False
-                            return -0.1*np.cos(thetaCol*np.pi/180), -0.1*np.sin(thetaCol*np.pi/180), False
+                            return 0.1, -0.1, False
                     else:
                         if thetaX >= 0 and thetaY <= 0:
                             return velx, vely, False
                         else:
                             if thetaX < 0:
-                                if self.collideSquare(x, y-8):
-                                    if thetaX <= 0:
-                                        return velx, 0, True
-                                    else:
-                                        return 0, 0, False                                
-                                return 0.1*np.cos(thetaCol*np.pi/180), vely, False
+                                if self.collideSquare(x, y-32):
+                                    return 0, 0, True                             
+                                return velx, 0, False
                             else:
-                                if self.collideSquare(x-8, y):
-                                    if thetaY <= 0:
-                                        return 0, vely, True
-                                    else:
-                                        return 0, 0, False
-                                return velx, 0.1*np.sin(thetaCol*np.pi/180), False
+                                if self.collideSquare(x-32, y):
+                                    return 0, 0, True
+                                return 0, vely, False
         count += 1
         return velx, vely, False
 
